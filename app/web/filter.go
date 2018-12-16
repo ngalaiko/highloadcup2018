@@ -51,18 +51,21 @@ func (w *Web) accountsFilter() func(ctx *fasthttp.RequestCtx) {
 			case "email_domain":
 				filters = append(
 					filters,
-					w.datastore.FilterEmail(datastore.Equal(string(value))),
+					w.datastore.FilterEmail(datastore.Domain(string(value))),
 				)
+				args["email"] = true
 			case "email_lt":
 				filters = append(
 					filters,
 					w.datastore.FilterEmail(datastore.Lt(string(value))),
 				)
+				args["email"] = true
 			case "email_gt":
 				filters = append(
 					filters,
 					w.datastore.FilterEmail(datastore.Gt(string(value))),
 				)
+				args["email"] = true
 			case "status_eq":
 				filters = append(
 					filters,

@@ -87,6 +87,17 @@ func Any(vv string) CompareFunc {
 	}
 }
 
+// Domain return domain predicate.
+func Domain(d string) CompareFunc {
+	return func(email string) bool {
+		parts := strings.Split(email, "@")
+		if len(parts) != 2 {
+			return false
+		}
+		return parts[1] == d
+	}
+}
+
 // Equal return equal predicate.
 func Equal(v1 string) CompareFunc {
 	return func(v2 string) bool {

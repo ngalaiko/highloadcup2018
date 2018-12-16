@@ -3,7 +3,6 @@ package datastore
 import (
 	"bytes"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/ngalayko/highloadcup/app/accounts"
@@ -474,8 +473,7 @@ func (d *Datastore) FilterStatus(compare CompareFunc) FilterFunc {
 func (d *Datastore) FilterEmail(compare CompareFunc) FilterFunc {
 	getByEmail := func(in map[int64]*accounts.Account) map[int64]*accounts.Account {
 		for email, a := range d.byEmail {
-			emailDomain := strings.Split(email, "@")[1]
-			if !compare(emailDomain) {
+			if !compare(email) {
 				continue
 			}
 			in[a.ID] = a
@@ -485,8 +483,7 @@ func (d *Datastore) FilterEmail(compare CompareFunc) FilterFunc {
 
 	filterByEmail := func(in map[int64]*accounts.Account) map[int64]*accounts.Account {
 		for id, a := range in {
-			emailDomain := strings.Split(a.Email, "@")[1]
-			if compare(emailDomain) {
+			if compare(a.Email) {
 				continue
 			}
 			delete(in, id)
