@@ -39,11 +39,11 @@ func (w *Web) accountsFilter() func(ctx *fasthttp.RequestCtx) {
 		filters := make([]datastore.FilterFunc, 0, ctx.URI().QueryArgs().Len())
 		args := make(map[string]bool, ctx.URI().QueryArgs().Len())
 		var parseErr error
-		var limit int64
+		var limit int
 		ctx.URI().QueryArgs().VisitAll(func(key, value []byte) {
 			switch string(key) {
 			case "limit":
-				limit, parseErr = strconv.ParseInt(string(value), 10, 64)
+				limit, parseErr = strconv.Atoi(string(value))
 				args["limit"] = true
 			case "sex_eq":
 				filters = append(filters, w.datastore.FilterSex(datastore.Equal(string(value))))
@@ -240,18 +240,7 @@ func (w *Web) accountsFilter() func(ctx *fasthttp.RequestCtx) {
 			Accounts: make([]*Account, 0, limit),
 		}
 
-		if len(args) == 1 {
-			for _, a := range w.datastore.GetAccounts()[:limit] {
-				res.Accounts = append(res.Accounts, &Account{
-					ID:    a.ID,
-					Email: a.Email,
-				})
-			}
-			w.responseJSON(ctx, res)
-			return
-		}
-
-		aa, err := w.datastore.FilterAccounts(filters...)
+		aa, err := w.datastore.FilterAccounts(limit, filters...)
 		if err != nil {
 			w.error(ctx, err)
 			return

@@ -149,12 +149,3 @@ func (d *Datastore) saveAccount(a *accounts.Account) {
 func (d *Datastore) GetAccounts() []*accounts.Account {
 	return d.ordered
 }
-
-// FilterAccounts returns accounts by given filters.
-func (d *Datastore) FilterAccounts(ff ...FilterFunc) (map[int64]*accounts.Account, error) {
-	res := make(map[int64]*accounts.Account)
-	for _, filter := range ff {
-		res = filter(res)
-	}
-	return res, nil
-}

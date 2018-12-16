@@ -61,6 +61,8 @@ func (w *Web) handlerGET(ctx *fasthttp.RequestCtx) {
 	switch string(ctx.Path()) {
 	case "/accounts/filter/":
 		w.accountsFilter()(ctx)
+	case "/accounts/group/":
+		w.accountsGroup()(ctx)
 	default:
 		ctx.SetStatusCode(fasthttp.StatusNotFound)
 	}

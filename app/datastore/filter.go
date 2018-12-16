@@ -8,6 +8,24 @@ import (
 	"github.com/ngalayko/highloadcup/app/accounts"
 )
 
+// FilterAccounts returns accounts by given filters.
+func (d *Datastore) FilterAccounts(limit int, ff ...FilterFunc) (map[int64]*accounts.Account, error) {
+	res := make(map[int64]*accounts.Account)
+	if len(ff) != 0 {
+		for _, filter := range ff {
+			res = filter(res)
+		}
+		return res, nil
+	}
+	if limit < 0 {
+		limit = len(d.ordered)
+	}
+	for _, a := range d.ordered[:limit] {
+		res[a.ID] = a
+	}
+	return res, nil
+}
+
 // FilterFunc is used to get accounts by a filter.
 type FilterFunc func(map[int64]*accounts.Account) map[int64]*accounts.Account
 
