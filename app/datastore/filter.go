@@ -30,13 +30,14 @@ func (d *Datastore) FilterPremiumNull(null string) FilterFunc {
 
 	filterPremiumNull := func(in map[int64]*accounts.Account) map[int64]*accounts.Account {
 		for id, a := range in {
-			if a == nil && empty {
+			if empty && a.Premium != nil {
+				delete(in, id)
 				continue
 			}
-			if a != nil && !empty {
+			if !empty && a.Premium == nil {
+				delete(in, id)
 				continue
 			}
-			delete(in, id)
 		}
 		return in
 	}
