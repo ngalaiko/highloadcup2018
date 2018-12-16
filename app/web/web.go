@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/valyala/fasthttp"
+	"github.com/valyala/fasthttp/pprofhandler"
 
 	"github.com/ngalayko/highloadcup/app/datastore"
 	"github.com/ngalayko/highloadcup/app/logger"
@@ -12,8 +13,9 @@ import (
 
 // Web is a web server.
 type Web struct {
-	log       *logger.Logger
-	datastore *datastore.Datastore
+	log           *logger.Logger
+	datastore     *datastore.Datastore
+	enableProfile bool
 }
 
 // New is a web constructor.
@@ -25,6 +27,12 @@ func New(
 		log:       log,
 		datastore: datastore,
 	}
+}
+
+// ListenAndServeProfile starts the server.
+func (w *Web) ListenAndServeProfile(addr string) error {
+	w.log.Info("starting profile server on %s", addr)
+	return fasthttp.ListenAndServe(addr, pprofhandler.PprofHandler)
 }
 
 // ListenAndServe starts the server.

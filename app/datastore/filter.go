@@ -265,6 +265,38 @@ func (d *Datastore) FilterInterestsContains(ii []byte) FilterFunc {
 	}
 }
 
+// FilterJoined filters accounts with birth matching a function.
+func (d *Datastore) FilterJoined(compare CompareDatesFunc) FilterFunc {
+	getByJoin := func(in map[int64]*accounts.Account) map[int64]*accounts.Account {
+		for join, aa := range d.byJoin {
+			if !compare(join) {
+				continue
+			}
+			for _, a := range aa {
+				in[a.ID] = a
+			}
+		}
+		return in
+	}
+
+	filterByJoin := func(in map[int64]*accounts.Account) map[int64]*accounts.Account {
+		for id, a := range in {
+			if compare(time.Unix(a.Joined, 0)) {
+				continue
+			}
+			delete(in, id)
+		}
+		return in
+	}
+
+	return func(in map[int64]*accounts.Account) map[int64]*accounts.Account {
+		if len(in) == 0 {
+			return getByJoin(in)
+		}
+		return filterByJoin(in)
+	}
+}
+
 // FilterBirth filters accounts with birth matching a function.
 func (d *Datastore) FilterBirth(compare CompareDatesFunc) FilterFunc {
 	getByBirth := func(in map[int64]*accounts.Account) map[int64]*accounts.Account {

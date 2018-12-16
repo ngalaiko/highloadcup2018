@@ -8,8 +8,9 @@ import (
 )
 
 var (
-	dataPath   = flag.String("data_path", "", "path to initial data")
-	listenAddr = flag.String("addr", ":80", "addr to listen")
+	dataPath    = flag.String("data_path", "", "path to initial data")
+	listenAddr  = flag.String("addr", ":80", "addr to listen")
+	profileAddr = flag.String("profile_addr", "", "enable profile")
 )
 
 func main() {
@@ -19,6 +20,16 @@ func main() {
 	if err != nil {
 		log.Panic(err.Error())
 	}
+
+	go func() {
+		if *profileAddr == "" {
+			return
+		}
+
+		if err := a.ListenAndServeProfile(*profileAddr); err != nil {
+			log.Printf("profile server stopped with error: %s", err)
+		}
+	}()
 
 	if err := a.ListenAndServe(*listenAddr); err != nil {
 		log.Printf("web server stopped with error: %s", err)

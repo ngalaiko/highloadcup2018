@@ -26,6 +26,7 @@ type Datastore struct {
 	byCountry    map[string][]*accounts.Account
 	byCity       map[string][]*accounts.Account
 	byBirth      map[time.Time][]*accounts.Account
+	byJoin       map[time.Time][]*accounts.Account
 	byInterest   map[string][]*accounts.Account
 	likedBy      map[string][]*accounts.Account
 	premiumStart map[time.Time][]*accounts.Account
@@ -49,6 +50,7 @@ func New(log *logger.Logger, i importer.Importer) (*Datastore, error) {
 		byCountry:    map[string][]*accounts.Account{},
 		byCity:       map[string][]*accounts.Account{},
 		byBirth:      map[time.Time][]*accounts.Account{},
+		byJoin:       map[time.Time][]*accounts.Account{},
 		byInterest:   map[string][]*accounts.Account{},
 		likedBy:      map[string][]*accounts.Account{},
 		premiumStart: map[time.Time][]*accounts.Account{},
@@ -91,6 +93,7 @@ func (d *Datastore) init() error {
 	d.log.Info("byCountry: %d", len(d.byCountry))
 	d.log.Info("byCity: %d", len(d.byCity))
 	d.log.Info("byBirth: %d", len(d.byBirth))
+	d.log.Info("byJoind: %d", len(d.byJoin))
 	d.log.Info("byInterest: %d", len(d.byInterest))
 	d.log.Info("likedBy: %d", len(d.likedBy))
 	d.log.Info("premiumStart: %d", len(d.premiumStart))
@@ -119,6 +122,9 @@ func (d *Datastore) saveAccount(a *accounts.Account) {
 
 	birth := time.Unix(a.Birth, 0)
 	d.byBirth[birth] = append(d.byBirth[birth], a)
+
+	join := time.Unix(a.Joined, 0)
+	d.byJoin[join] = append(d.byJoin[join], a)
 
 	for _, i := range a.Interests {
 		d.byInterest[i] = append(d.byInterest[i], a)

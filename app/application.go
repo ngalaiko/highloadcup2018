@@ -32,3 +32,8 @@ func New(dataPath string) (*Application, error) {
 func (a *Application) ListenAndServe(addr string) error {
 	return a.web.ListenAndServe(addr)
 }
+
+// ListenAndServeProfile starts the server.
+func (a *Application) ListenAndServeProfile(addr string) error {
+	return a.web.ListenAndServeProfile(addr)
+}

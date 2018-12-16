@@ -59,6 +59,46 @@ func (w *Web) accountsGroup() func(ctx *fasthttp.RequestCtx) {
 					filters,
 					w.datastore.FilterBirth(filter),
 				)
+			case "fname":
+				filters = append(
+					filters,
+					w.datastore.FilterFName(datastore.Equal(string(value))),
+				)
+			case "sname":
+				filters = append(
+					filters,
+					w.datastore.FilterSName(datastore.Equal(string(value))),
+				)
+			case "city":
+				filters = append(
+					filters,
+					w.datastore.FilterCity(datastore.Equal(string(value))),
+				)
+			case "joined":
+				filter, err := datastore.Year(string(value))
+				if err != nil {
+					parseErr = err
+					return
+				}
+				filters = append(
+					filters,
+					w.datastore.FilterJoined(filter),
+				)
+			case "status":
+				filters = append(
+					filters,
+					w.datastore.FilterStatus(datastore.Equal(string(value))),
+				)
+			case "likes":
+				filters = append(
+					filters,
+					w.datastore.FilterLikesContains(value),
+				)
+			case "interests":
+				filters = append(
+					filters,
+					w.datastore.FilterInterestsContains(value),
+				)
 			default:
 				return
 			}

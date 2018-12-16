@@ -10,7 +10,13 @@ local-build:
 	go build -o ${BIN} ${CMD_DIR}/main.go
 
 local-run: local-build
-	${BIN} --data_path=./test_data/data/data.zip
+	${BIN} --data_path=./test_data/data/data.zip --profile_addr=:8080
+
+local-profile-heap: 
+	go tool pprof ${BIN} http://127.0.0.1:8080/debug/pprof/heap
+
+local-profile-cpu: 
+	go tool pprof ${BIN} http://127.0.0.1:8080/debug/pprof/profile?seconds=10
 
 docker-run: docker-build
 	cp -R ./test_data/data /tmp/data

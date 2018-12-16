@@ -70,10 +70,6 @@ func (d *Datastore) GroupAccounts(keys []GroupKeyFunc, order bool, limit int, ff
 		key := &bytes.Buffer{}
 		for _, group := range keys {
 			name, values := group(a)
-			if len(values) == 0 {
-				key.Reset()
-				break
-			}
 			for _, value := range values {
 				if key.Len() != 0 {
 					key.WriteString(",")
@@ -102,15 +98,12 @@ func (d *Datastore) GroupAccounts(keys []GroupKeyFunc, order bool, limit int, ff
 		result = append(result, part)
 	}
 
-	if !order {
-		sort.Slice(result, func(i, j int) bool {
-			return result[i]["count"].(int) < result[j]["count"].(int)
-		})
-	} else {
-		sort.Slice(result, func(i, j int) bool {
+	sort.Slice(result, func(i, j int) bool {
+		if order {
 			return result[i]["count"].(int) > result[j]["count"].(int)
-		})
-	}
+		}
+		return result[i]["count"].(int) < result[j]["count"].(int)
+	})
 
 	if len(result) <= limit {
 		return result, nil
