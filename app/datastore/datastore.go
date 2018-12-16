@@ -2,6 +2,7 @@ package datastore
 
 import (
 	"fmt"
+	"sort"
 	"time"
 
 	"github.com/ngalayko/highloadcup/app/accounts"
@@ -14,6 +15,7 @@ type Datastore struct {
 	log      *logger.Logger
 	importer importer.Importer
 
+	ordered      []*accounts.Account
 	byID         map[int64]*accounts.Account
 	bySex        map[string][]*accounts.Account
 	byEmail      map[string]*accounts.Account
@@ -55,6 +57,9 @@ func New(log *logger.Logger, i importer.Importer) (*Datastore, error) {
 	if err := d.init(); err != nil {
 		return nil, err
 	}
+	sort.Slice(d.ordered, func(i, j int) bool {
+		return d.ordered[i].ID > d.ordered[j].ID
+	})
 	return d, nil
 }
 
@@ -71,6 +76,7 @@ func (d *Datastore) init() error {
 
 	d.log.Info("loaded %d accounts", len(aa))
 
+	d.ordered = aa
 	for _, a := range aa {
 		d.saveAccount(a)
 	}
@@ -137,6 +143,11 @@ func (d *Datastore) saveAccount(a *accounts.Account) {
 	d.premiumEnd[pEnd] = append(d.premiumEnd[pEnd], a)
 
 	d.premium = append(d.premium, a)
+}
+
+// GetAccounts returns all accounts.
+func (d *Datastore) GetAccounts() []*accounts.Account {
+	return d.ordered
 }
 
 // FilterAccounts returns accounts by given filters.
