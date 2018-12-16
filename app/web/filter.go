@@ -2,11 +2,11 @@ package web
 
 import (
 	"errors"
+	"sort"
 	"strconv"
 
 	"github.com/valyala/fasthttp"
 
-	"github.com/ngalayko/highloadcup/app/accounts"
 	"github.com/ngalayko/highloadcup/app/datastore"
 )
 
@@ -45,7 +45,7 @@ func (w *Web) accountsFilter() func(ctx *fasthttp.RequestCtx) {
 				limit, parseErr = strconv.Atoi(string(value))
 				args["limit"] = true
 			case "sex_eq":
-				filters = append(filters, w.datastore.FilterSex(accounts.ParseSex(value)))
+				filters = append(filters, w.datastore.FilterSex(datastore.Equal(string(value))))
 				args["sex"] = true
 			case "email_domain":
 				filters = append(
@@ -232,7 +232,7 @@ func (w *Web) accountsFilter() func(ctx *fasthttp.RequestCtx) {
 			return
 		}
 
-		aa, err := w.datastore.FilterAccounts(limit, filters...)
+		aa, err := w.datastore.FilterAccounts(filters...)
 		if err != nil {
 			w.error(ctx, err)
 			return
@@ -241,6 +241,7 @@ func (w *Web) accountsFilter() func(ctx *fasthttp.RequestCtx) {
 		res := &Accounts{
 			Accounts: make([]*Account, 0, len(aa)),
 		}
+
 		for _, a := range aa {
 			ac := &Account{
 				ID:    a.ID,
@@ -298,6 +299,14 @@ func (w *Web) accountsFilter() func(ctx *fasthttp.RequestCtx) {
 			}
 
 			res.Accounts = append(res.Accounts, ac)
+		}
+
+		sort.Slice(res.Accounts, func(i, j int) bool {
+			return res.Accounts[i].ID > res.Accounts[j].ID
+		})
+
+		if len(res.Accounts) > limit {
+			res.Accounts = res.Accounts[:limit]
 		}
 
 		w.responseJSON(ctx, res)

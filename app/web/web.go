@@ -73,7 +73,7 @@ func (w *Web) error(ctx *fasthttp.RequestCtx, err error) {
 }
 
 func (w *Web) responseJSON(ctx *fasthttp.RequestCtx, data interface{}) {
-	jsonData, err := json.Marshal(data)
+	jsonData, err := json.MarshalIndent(data, "", "	")
 	if err != nil {
 		w.error(ctx, err)
 		return

@@ -15,7 +15,7 @@ type Datastore struct {
 	importer importer.Importer
 
 	byID         map[int64]*accounts.Account
-	bySex        map[accounts.SexType][]*accounts.Account
+	bySex        map[string][]*accounts.Account
 	byEmail      map[string]*accounts.Account
 	byStatus     map[string][]*accounts.Account
 	byFName      map[string][]*accounts.Account
@@ -38,7 +38,7 @@ func New(log *logger.Logger, i importer.Importer) (*Datastore, error) {
 		importer:     i,
 		log:          log,
 		byID:         map[int64]*accounts.Account{},
-		bySex:        map[accounts.SexType][]*accounts.Account{},
+		bySex:        map[string][]*accounts.Account{},
 		byEmail:      map[string]*accounts.Account{},
 		byStatus:     map[string][]*accounts.Account{},
 		byFName:      map[string][]*accounts.Account{},
@@ -101,8 +101,7 @@ func (d *Datastore) saveAccount(a *accounts.Account) {
 
 	d.byID[a.ID] = a
 
-	sex := accounts.ParseSex([]byte(a.Sex))
-	d.bySex[sex] = append(d.bySex[sex], a)
+	d.bySex[a.Sex] = append(d.bySex[a.Sex], a)
 
 	d.byEmail[a.Email] = a
 	d.byStatus[a.Status] = append(d.byStatus[a.Status], a)
@@ -141,13 +140,10 @@ func (d *Datastore) saveAccount(a *accounts.Account) {
 }
 
 // FilterAccounts returns accounts by given filters.
-func (d *Datastore) FilterAccounts(limit int, ff ...FilterFunc) (map[int64]*accounts.Account, error) {
-	res := make(map[int64]*accounts.Account, limit)
+func (d *Datastore) FilterAccounts(ff ...FilterFunc) (map[int64]*accounts.Account, error) {
+	res := make(map[int64]*accounts.Account)
 	for _, filter := range ff {
-		res = filter(limit, res)
-		if len(res) >= limit {
-			return res, nil
-		}
+		res = filter(res)
 	}
 	return res, nil
 }
