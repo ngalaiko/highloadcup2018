@@ -104,13 +104,13 @@ func NotEqual(v1 string) CompareFunc {
 // Lt return equal predicate.
 func Lt(v1 string) CompareFunc {
 	return func(v2 string) bool {
-		return v2 < v1
+		return strings.Compare(v2, v1) < 0
 	}
 }
 
 // Gt return equal predicate.
 func Gt(v1 string) CompareFunc {
 	return func(v2 string) bool {
-		return v2 > v1
+		return strings.Compare(v2, v1) > 0
 	}
 }
