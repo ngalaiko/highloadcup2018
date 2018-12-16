@@ -259,27 +259,27 @@ func (w *Web) accountsFilter() func(ctx *fasthttp.RequestCtx) {
 				*ac.Status = a.Status
 			}
 
-			if args["fname"] {
+			if args["fname"] && a.FName != "" {
 				ac.FName = new(string)
 				*ac.FName = a.FName
 			}
 
-			if args["sname"] {
+			if args["sname"] && a.SName != "" {
 				ac.SName = new(string)
 				*ac.SName = a.SName
 			}
 
-			if args["phone"] {
+			if args["phone"] && a.Phone != "" {
 				ac.Phone = new(string)
 				*ac.Phone = a.Phone
 			}
 
-			if args["country"] {
+			if args["country"] && a.Country != "" {
 				ac.Country = new(string)
 				*ac.Country = a.Country
 			}
 
-			if args["city"] {
+			if args["city"] && a.City != "" {
 				ac.City = new(string)
 				*ac.City = a.City
 			}
