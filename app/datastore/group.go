@@ -85,6 +85,7 @@ func (d *Datastore) GroupAccounts(keys []GroupKeyFunc, order bool, limit int, ff
 		rawRes[key.String()]++
 	}
 
+	var additionalSortField string
 	result := make([]map[string]interface{}, 0, len(rawRes))
 	for k, v := range rawRes {
 		fields := strings.Split(k, ",")
@@ -92,18 +93,33 @@ func (d *Datastore) GroupAccounts(keys []GroupKeyFunc, order bool, limit int, ff
 		for _, kv := range fields {
 			kvSlice := strings.Split(kv, "=")
 			part[kvSlice[0]] = kvSlice[1]
+
+			additionalSortField = kvSlice[0]
 		}
 		part["count"] = v
 
 		result = append(result, part)
 	}
 
-	sort.Slice(result, func(i, j int) bool {
+	additionalSortFunc := func(i, j int) bool {
+		if order {
+			return result[i][additionalSortField].(string) > result[j][additionalSortField].(string)
+		}
+		return result[i][additionalSortField].(string) < result[j][additionalSortField].(string)
+	}
+
+	mainSortFunc := func(i, j int) bool {
+		if result[i]["count"].(int) == result[j]["count"].(int) {
+			return additionalSortFunc(i, j)
+		}
+
 		if order {
 			return result[i]["count"].(int) > result[j]["count"].(int)
 		}
 		return result[i]["count"].(int) < result[j]["count"].(int)
-	})
+	}
+
+	sort.Slice(result, mainSortFunc)
 
 	if len(result) <= limit {
 		return result, nil
