@@ -7,6 +7,7 @@ import (
 
 	"github.com/valyala/fasthttp"
 
+	"github.com/ngalayko/highloadcup/app/accounts"
 	"github.com/ngalayko/highloadcup/app/datastore"
 )
 
@@ -15,19 +16,19 @@ var errLimitNotSpecified = errors.New("limit not specified")
 func (w *Web) accountsFilter() func(ctx *fasthttp.RequestCtx) {
 
 	type Account struct {
-		ID        int64    `json:"id"`
-		Email     string   `json:"email"`
-		Sex       *string  `json:"sex,omitempty"`
-		Status    *string  `json:"status,omitempty"`
-		FName     *string  `json:"fname,omitempty"`
-		SName     *string  `json:"sname,omitempty"`
-		Phone     *string  `json:"phome,omitempty"`
-		Country   *string  `json:"country,omitempty"`
-		City      *string  `json:"city,omitempty"`
-		Birth     *int64   `json:"birth,omitempty"`
-		Interests []string `json:"interests,omitempty"`
-		Likes     []string `json:"likes,omitempty"`
-		Premium   *bool    `json:"premium,omitempty"`
+		ID        int64             `json:"id"`
+		Email     string            `json:"email"`
+		Sex       *string           `json:"sex,omitempty"`
+		Status    *string           `json:"status,omitempty"`
+		FName     *string           `json:"fname,omitempty"`
+		SName     *string           `json:"sname,omitempty"`
+		Phone     *string           `json:"phome,omitempty"`
+		Country   *string           `json:"country,omitempty"`
+		City      *string           `json:"city,omitempty"`
+		Birth     *int64            `json:"birth,omitempty"`
+		Interests []string          `json:"interests,omitempty"`
+		Likes     []string          `json:"likes,omitempty"`
+		Premium   *accounts.Premium `json:"premium,omitempty"`
 	}
 
 	type Accounts struct {
@@ -296,6 +297,10 @@ func (w *Web) accountsFilter() func(ctx *fasthttp.RequestCtx) {
 				for likeID := range a.LikesMap {
 					ac.Likes = append(ac.Likes, likeID)
 				}
+			}
+
+			if args["premium"] {
+				ac.Premium = a.Premium
 			}
 
 			res.Accounts = append(res.Accounts, ac)
