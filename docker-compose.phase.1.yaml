@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+    tester-phase-1:
+        build: ./tester
+        command:
+            - --app_endpoint=http://app:80
+            - --data_path=/tmp/answers/phase_1_get.answ
+            - --log_path=/tmp/logs
+            - --healthcheck_endpoint=http://app:80/healthcheck
+        volumes:
+            - ./test_data/answers:/tmp/answers
+            - ./test_data/logs:/tmp/logs
+        depends_on:
+            - app

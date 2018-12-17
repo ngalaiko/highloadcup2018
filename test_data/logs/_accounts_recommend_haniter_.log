@@ -1,0 +1,16 @@
+{
+	"expected": {},
+	"got": {},
+	"url": {
+		"Scheme": "http",
+		"Opaque": "",
+		"User": null,
+		"Host": "app:80",
+		"Path": "/accounts/recommend/haniter/",
+		"RawPath": "",
+		"ForceQuery": false,
+		"RawQuery": "query_id=71",
+		"Fragment": ""
+	},
+	"response_time": "8.6876ms"
+}

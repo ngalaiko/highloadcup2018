@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+    app:
+        build: ./app
+        image: stor.highloadcup.ru/accounts/cat_winner
+        ports:
+            - 80:80
+        command: 
+            - --addr=:80
+            - --data_path=/tmp/data/data.zip
+        volumes:
+            - ./test_data/data:/tmp/data

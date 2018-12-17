@@ -1,0 +1,64 @@
+{
+	"expected": {
+		"StatusCode": 400
+	},
+	"got": {
+		"StatusCode": 200,
+		"Response": {
+			"groups": [
+				{
+					"city": "Белово",
+					"count": 1
+				},
+				{
+					"city": "Варелона",
+					"count": 1
+				},
+				{
+					"city": "Варолесск",
+					"count": 1
+				},
+				{
+					"city": "Варосинки",
+					"count": 1
+				},
+				{
+					"city": "Володам",
+					"count": 1
+				},
+				{
+					"city": "Кронокамск",
+					"count": 1
+				},
+				{
+					"city": "Лейподам",
+					"count": 1
+				},
+				{
+					"city": "Мосогорск",
+					"count": 1
+				},
+				{
+					"city": "Росатск",
+					"count": 1
+				},
+				{
+					"city": "Росоград",
+					"count": 1
+				}
+			]
+		}
+	},
+	"url": {
+		"Scheme": "http",
+		"Opaque": "",
+		"User": null,
+		"Host": "app:80",
+		"Path": "/accounts/group/",
+		"RawPath": "",
+		"ForceQuery": false,
+		"RawQuery": "keys=phone%2Ccity\u0026order=1\u0026query_id=835\u0026interests=%D0%A2%D0%B0%D1%82%D1%83%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B8\u0026birth=1988\u0026limit=10",
+		"Fragment": ""
+	},
+	"response_time": "1.4685ms"
+}

@@ -67,6 +67,8 @@ func (w *Web) handlerPOST(ctx *fasthttp.RequestCtx) {
 
 func (w *Web) handlerGET(ctx *fasthttp.RequestCtx) {
 	switch string(ctx.Path()) {
+	case "/healthcheck":
+		w.healthcheck()(ctx)
 	case "/accounts/filter/":
 		w.accountsFilter()(ctx)
 	case "/accounts/group/":

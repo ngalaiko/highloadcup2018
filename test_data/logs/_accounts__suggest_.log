@@ -1,0 +1,64 @@
+{
+	"expected": {
+		"StatusCode": 200,
+		"Response": {
+			"accounts": [
+				{
+					"email": "senhadas@yahoo.com",
+					"fname": "Игорь",
+					"id": 9967,
+					"status": "свободны"
+				},
+				{
+					"email": "domigdagomliah@ya.ru",
+					"fname": "Глеб",
+					"id": 9723,
+					"sname": "Стамолоко",
+					"status": "заняты"
+				},
+				{
+					"email": "byctunel@gmail.com",
+					"fname": "Дмитрий",
+					"id": 9711,
+					"status": "заняты"
+				},
+				{
+					"email": "alkovcehpoc@gmail.com",
+					"fname": "Степан",
+					"id": 9709,
+					"sname": "Кисатоло",
+					"status": "заняты"
+				},
+				{
+					"email": "irerducsopmewe@yandex.ru",
+					"fname": "Глеб",
+					"id": 8485,
+					"sname": "Колололан",
+					"status": "заняты"
+				},
+				{
+					"email": "hiudbes@inbox.com",
+					"fname": "Георгий",
+					"id": 7881,
+					"sname": "Лебашечан",
+					"status": "всё сложно"
+				}
+			]
+		}
+	},
+	"got": {
+		"StatusCode": 404
+	},
+	"url": {
+		"Scheme": "http",
+		"Opaque": "",
+		"User": null,
+		"Host": "app:80",
+		"Path": "/accounts/3634/suggest/",
+		"RawPath": "",
+		"ForceQuery": false,
+		"RawQuery": "country=%D0%A4%D0%B8%D0%BD%D0%B0%D1%82%D1%80%D0%B8%D1%81\u0026query_id=134\u0026limit=6",
+		"Fragment": ""
+	},
+	"response_time": "691.3µs"
+}
