@@ -14,6 +14,9 @@ func (d *Datastore) FilterAccounts(limit int, ff ...FilterFunc) (map[int64]*acco
 	if len(ff) != 0 {
 		for _, filter := range ff {
 			res = filter(res)
+			if len(res) == 0 {
+				return nil, nil
+			}
 		}
 		return res, nil
 	}
