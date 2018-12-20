@@ -292,16 +292,6 @@ func (w *Web) accountsFilter() func(ctx *fasthttp.RequestCtx) {
 				*ac.Birth = a.Birth
 			}
 
-			if args["interests"] {
-				ac.Interests = a.Interests
-			}
-
-			if args["likes"] {
-				for likeID := range a.LikesMap {
-					ac.Likes = append(ac.Likes, likeID)
-				}
-			}
-
 			if args["premium"] {
 				ac.Premium = a.Premium
 			}
