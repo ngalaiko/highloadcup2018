@@ -17,7 +17,6 @@ type Answer struct {
 	Response   map[string]interface{} `json:",omitempty"`
 }
 
-// Report is a test report with results.
 type Report struct {
 	Expected     *Answer  `json:"expected"`
 	Got          *Answer  `json:"got"`
@@ -56,15 +55,15 @@ func (a *Answer) Test() (bool, *Report, error) {
 	_ = json.Unmarshal(body, &jsonBody)
 
 	success := true
+	report.URL = a.URL
+
 	if resp.StatusCode != a.StatusCode {
-		report.URL = a.URL
 		report.Expected.StatusCode = a.StatusCode
 		report.Got.StatusCode = resp.StatusCode
 		success = false
 	}
 
 	if !reflect.DeepEqual(a.Response, jsonBody) {
-		report.URL = a.URL
 		report.Expected.Response = a.Response
 		report.Got.Response = jsonBody
 		success = false

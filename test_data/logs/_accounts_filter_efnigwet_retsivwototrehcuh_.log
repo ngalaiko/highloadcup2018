@@ -1,16 +1,23 @@
 {
-	"expected": {},
-	"got": {},
-	"url": {
-		"Scheme": "http",
-		"Opaque": "",
-		"User": null,
-		"Host": "app:80",
-		"Path": "/accounts/filter/efnigwet/retsivwototrehcuh/",
-		"RawPath": "",
-		"ForceQuery": false,
-		"RawQuery": "query_id=217",
-		"Fragment": ""
-	},
-	"response_time": "1.9443ms"
+	"Successful": 0,
+	"Failed": 1,
+	"SuccessRate": 0,
+	"Reports": [
+		{
+			"expected": {},
+			"got": {},
+			"url": {
+				"Scheme": "http",
+				"Opaque": "",
+				"User": null,
+				"Host": "app:80",
+				"Path": "/accounts/filter/efnigwet/retsivwototrehcuh/",
+				"RawPath": "",
+				"ForceQuery": false,
+				"RawQuery": "query_id=217",
+				"Fragment": ""
+			},
+			"response_time": "2.681ms"
+		}
+	]
 }

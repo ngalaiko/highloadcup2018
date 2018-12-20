@@ -1,0 +1,23 @@
+{
+	"Successful": 0,
+	"Failed": 1,
+	"SuccessRate": 0,
+	"Reports": [
+		{
+			"expected": {},
+			"got": {},
+			"url": {
+				"Scheme": "http",
+				"Opaque": "",
+				"User": null,
+				"Host": "app:80",
+				"Path": "/accounts/rinelfer/",
+				"RawPath": "",
+				"ForceQuery": false,
+				"RawQuery": "query_id=619",
+				"Fragment": ""
+			},
+			"response_time": "531.4µs"
+		}
+	]
+}

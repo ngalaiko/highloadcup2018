@@ -41,6 +41,14 @@ func New(
 
 var digits = regexp.MustCompile(`\d+`)
 
+// Summary is an aggregation of reports.
+type Summary struct {
+	Successful  float64
+	Failed      float64
+	SuccessRate float64
+	Reports     []*answers.Report
+}
+
 // Run runs tests.
 func (t *Tester) Run(
 	healthcheckEndpoint string,
@@ -50,7 +58,7 @@ func (t *Tester) Run(
 
 	log.Printf("starting tests...")
 
-	reports := make(map[string]*answers.Report, len(t.answers))
+	reports := map[string]*Summary{}
 
 	successful := 0
 	for _, a := range t.answers {
@@ -59,17 +67,28 @@ func (t *Tester) Run(
 			return err
 		}
 
-		if ok {
-			successful++
-			continue
+		path := report.URL.Path
+		path = strings.Replace(path, "/", "_", -1)
+		path = digits.ReplaceAllString(path, "")
+
+		summary, exists := reports[path]
+		if !exists {
+			summary = &Summary{}
+			reports[path] = summary
 		}
 
-		reports[report.URL.Path] = report
+		if ok {
+			successful++
+			summary.Successful++
+		} else {
+			summary.Failed++
+		}
+
+		reports[path].Reports = append(reports[path].Reports, report)
 	}
 
 	for path, report := range reports {
-		path = strings.Replace(path, "/", "_", -1)
-		path = digits.ReplaceAllString(path, "")
+		report.SuccessRate = report.Successful / (report.Successful + report.Failed)
 		if err := writeToFile(
 			fmt.Sprintf("%s/%s.log", logPath, path),
 			report,
